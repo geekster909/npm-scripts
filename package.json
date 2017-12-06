@@ -1,0 +1,32 @@
+{
+  "name": "npmscripts",
+  "version": "1.0.0",
+  "description": "npm scripts",
+  "main": "index.js",
+  "scripts": {
+    "postinstall": "npm run build",
+    "scss": "node-sass --output-style compressed -o dist/styles assets/styles/scss",
+    "autoprefixer": "postcss -u autoprefixer -r dist/styles/*",
+    "uglify": "mkdir -p dist/scripts && uglifyjs assets/scripts/*.js -m -c -o dist/scripts/main.min.js && uglifyjs assets/scripts/vendor/*.js -m -c -o dist/scripts/vendor.min.js",
+    "imagemin": "imagemin assets/images dist/images -p",
+    "serve": "browser-sync start --server --files 'dist/styles/*.css, dist/scripts/*.js'",
+    "build:css": "npm run scss && npm run autoprefixer",
+    "build": "npm run scss && npm run autoprefixer && npm run uglify",
+    "watch:css": "onchange 'assets/styles/scss/**/*.scss' -- npm run build:css",
+    "watch:js": "onchange 'assets/scripts/**/*.js' -- npm run uglify",
+    "watch:img": "onchange 'assets/images/**' -- npm run imagemin",
+    "watch": "parallelshell 'npm run serve' 'npm run watch:css' 'npm run watch:js' 'npm run watch:img'"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "autoprefixer": "^6.3.6",
+    "browser-sync": "^2.12.8",
+    "imagemin-cli": "^2.1.0",
+    "node-sass": "^3.7.0",
+    "onchange": "^2.4.0",
+    "parallelshell": "^2.0.0",
+    "postcss-cli": "^2.5.2",
+    "uglify-js": "^2.6.2"
+  }
+}
